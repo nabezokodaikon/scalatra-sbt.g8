@@ -7,6 +7,22 @@ import ScalateKeys._
 import com.earldouglas.xsbtwebplugin.PluginKeys._
 import com.earldouglas.xsbtwebplugin.WebPlugin._
 
+object Format {
+  import com.typesafe.sbt.SbtScalariform._
+
+  lazy val all = scalariformSettings ++ Seq(
+    ScalariformKeys.preferences in Compile := formattingPreferences,
+    ScalariformKeys.preferences in Test := formattingPreferences
+  )
+
+  def formattingPreferences = {
+    import scalariform.formatter.preferences._
+    FormattingPreferences()
+      .setPreference(AlignParameters, true)
+      .setPreference(AlignSingleLineCaseStatements, false)
+  }
+}
+
 object $name;format="Camel"$Build extends Build {
   val Organization = "$organization$"
   val Name = "$name$"
@@ -26,7 +42,7 @@ object $name;format="Camel"$Build extends Build {
       libraryDependencies ++= Seq(
         "org.scalatra" %% "scalatra" % ScalatraVersion,
         "org.scalatra" %% "scalatra-scalate" % ScalatraVersion,
-        "org.scalatra" %% "scalatra-specs2" % ScalatraVersion % "test",
+        "org.scalatra" %% "scalatra-scalatest" % "2.2.2" % "test",
         "ch.qos.logback" % "logback-classic" % "1.0.6" % "runtime",
         "org.eclipse.jetty" % "jetty-webapp" % "8.1.8.v20121106" % "container",
         "org.eclipse.jetty.orbit" % "javax.servlet" % "3.0.0.v201112011016" % "container;provided;test" artifacts (Artifact("javax.servlet", "jar", "jar"))
@@ -44,6 +60,6 @@ object $name;format="Camel"$Build extends Build {
         )
       },
       port in container.Configuration := 9000
-    )
+    ) ++ Format.all
   )
 }
