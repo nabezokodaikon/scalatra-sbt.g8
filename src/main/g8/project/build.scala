@@ -4,6 +4,8 @@ import org.scalatra.sbt._
 import org.scalatra.sbt.PluginKeys._
 import com.mojolly.scalate.ScalatePlugin._
 import ScalateKeys._
+import com.earldouglas.xsbtwebplugin.PluginKeys._
+import com.earldouglas.xsbtwebplugin.WebPlugin._
 
 object $name;format="Camel"$Build extends Build {
   val Organization = "$organization$"
@@ -40,7 +42,8 @@ object $name;format="Camel"$Build extends Build {
             Some("templates")
           )
         )
-      }
+      },
+      port in container.Configuration := 9000
     )
   )
 }
